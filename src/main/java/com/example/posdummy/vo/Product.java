@@ -47,4 +47,8 @@ public class Product {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+
+    @Column(columnDefinition = "DOUBLE DEFAULT 0")
+    private long subCategoryId;  //maped by the parentCategoryId of the category
+
 }

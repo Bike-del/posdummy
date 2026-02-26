@@ -27,4 +27,8 @@ public class ProductDto {
 
     private long brandId;
 
+    private boolean status;
+
+    private long subCategoryId;
+
 }

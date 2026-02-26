@@ -47,4 +47,16 @@ public class CategoryController {
     }
 
 
+    @GetMapping("/subCategory/{id}")
+    public List<Category> getSubCategory(@PathVariable long id){
+        return categoryService.getSubCategory(id);
+    }
+
+    @GetMapping("/parentCategory")
+    public List<Category> getParentCategory(){
+        return categoryService.getParentCategory();
+    }
+
+
+
 }

@@ -49,4 +49,16 @@ public class CategoryServiceImpl implements CategoryService{
     public Category categoryById(long id) {
         return categoryRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Not found for this id:"+id));
     }
+
+    @Override
+    public List<Category> getSubCategory(long parentCategoryId) {
+         return categoryRepository.findCategoryByParentCategoryId(parentCategoryId);
+      //  return List.of();
+    }
+
+    public List<Category> getParentCategory(){
+        return  categoryRepository.findParentCategory();
+    }
+
+
 }

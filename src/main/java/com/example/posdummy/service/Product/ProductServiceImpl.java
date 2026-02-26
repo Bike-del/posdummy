@@ -41,7 +41,7 @@ public class ProductServiceImpl implements ProductService{
         product.setCreatedAt(LocalDateTime.now());
         product.setUpdatedAt(LocalDateTime.now());
 
-
+        product.setSubCategoryId(productDto.getSubCategoryId());
         product.setCategory(category);
 
         return productRepositry.save(product);
@@ -65,6 +65,8 @@ public class ProductServiceImpl implements ProductService{
         p.setItemCode(productDto.getItemCode());
         p.setSellingPrice(productDto.getSellingPrice());
         p.setProductName(productDto.getProductName());
+        p.setStatus(productDto.isStatus());
+        p.setSubCategoryId(productDto.getSubCategoryId());
 
         return productRepositry.save(p);
 
