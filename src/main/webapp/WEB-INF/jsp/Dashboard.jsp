@@ -45,9 +45,7 @@
                     <label class="form-label">Product</label>
                     <select id="productSelect" name="productId" class="form-select rounded-pill" required>
                         <c:forEach var="product" items="${products}">
-                            <option value="${product.productId}" data-name="${product.productName}"
-                                    data-category="${product.category.categoryName}"
-                                    data-price="${product.sellingPrice}"> ${product.productName}</option>
+                            <option value="${product.productId}"> ${product.productName}</option>
                         </c:forEach>
                     </select>
                 </div>
@@ -80,75 +78,95 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
 
-        var productSelect = document.getElementById("productSelect");
-        var salesTableBody = document.querySelector("#salesTable tbody");
-        var grandTotalSpan = document.getElementById("grandTotal");
+    $(document).ready(function () {
+        const $productSelect = $('#productSelect');
+        const $salesTableBody = $('#salesTable tbody');
+        const $grandTotal = $('#grandTotal');
 
-        // Add product to table
-        productSelect.addEventListener("change", function () {
-            var selected = this.options[this.selectedIndex];
-            var id = selected.value;
-            var name = selected.getAttribute("data-name");
-            var category = selected.getAttribute("data-category");
-            var price = parseFloat(selected.getAttribute("data-price"));
+        //add product using ajax
+        $productSelect.on("change", function () {
 
-            if (!id) return;
+            const ProductId = $(this).val();
+            if (!ProductId) return;
 
-            // Prevent duplicate
-            if (document.getElementById("row-" + id)) {
-                alert("Product already added!");
+            //prevent the duplicate row
+            if ($("#row-" + ProductId).length){
+                alert("Product already added!")
                 return;
             }
 
-            var row = document.createElement("tr");
-            row.id = "row-" + id;
+            $.ajax({
+                url: "/product/" + ProductId,
+                type: 'GET',
+                dataType: "json",
+                success: function (product) {
+                    const price = parseFloat(product.sellingPrice);
 
-            row.innerHTML =
-                "<td>" + name + "</td>" +
-                "<td>" + category + "</td>" +
-                "<td class='price'>" + price.toFixed(2) + "</td>" +
-                "<td><input type='number' class='qty' value='1' min='1' data-id='" + id + "'></td>" +
-                "<td class='rowTotal'>" + price.toFixed(2) + "</td>" +
-                "<td><button class='removeBtn' data-id='" + id + "'>X</button></td>";
+                    const row =
+                        '<tr id="row-' + product.productId + '">' +
 
-            salesTableBody.appendChild(row);
+
+
+
+
+                        '<td>' + product.productName + '</td>' +
+
+                        '<td>' + product.category.categoryName + '</td>' +
+
+                        '<td class="price">' + price.toFixed(2) + '</td>' +
+
+                        '<td><input type="number" class="form-control qty" value="1" min="1"/></td>' +
+
+                        '<td class="rowTotal">' + price.toFixed(2) + '</td>' +
+
+                        '<td><button class="btn btn-sm btn-danger removeBtn">X</button></td>' +
+
+                        '</tr>';
+                    $salesTableBody.append(row);
+                    $productSelect.val("");
+                    calculateGrandTotal();
+                },
+                error: function () {
+                    alert("Failed to fetch productDetails.");
+                }
+
+
+            })
+
+        });
+
+        //quantity change
+        $salesTableBody.on("input", ".qty", function () {
+            const $row = $(this).closest("tr");
+            const price = parseFloat($row.find(".price").text());
+            const qty = parseInt($(this).val()) || 0;
+
+            $row.find(".rowTotal").text((price * qty).toFixed(2));
             calculateGrandTotal();
         });
 
-        // Quantity change
-        salesTableBody.addEventListener("input", function (e) {
-            if (e.target && e.target.className === "qty") {
-                var row = e.target.parentNode.parentNode;
-                var price = parseFloat(row.querySelector(".price").innerText);
-                var qty = parseInt(e.target.value, 10);
-                row.querySelector(".rowTotal").innerText = (price * qty).toFixed(2);
-                calculateGrandTotal();
-            }
-        });
+        //remove table
+        $salesTableBody.on("click", ".removeBtn", function () {
+            $(this).closest("tr").remove();
+            calculateGrandTotal();
+        })
 
-        // Remove product
-        salesTableBody.addEventListener("click", function (e) {
-            if (e.target && e.target.className === "removeBtn") {
-                var id = e.target.getAttribute("data-id");
-                var row = document.getElementById("row-" + id);
-                if (row) row.parentNode.removeChild(row);
-                calculateGrandTotal();
-            }
-        });
-
-        // Calculate grand total
+        //grand total calculation
         function calculateGrandTotal() {
-            var total = 0;
-            var rows = salesTableBody.querySelectorAll(".rowTotal");
-            for (var i = 0; i < rows.length; i++) {
-                total += parseFloat(rows[i].innerText);
-            }
-            grandTotalSpan.innerText = total.toFixed(2);
+
+            let total = 0;
+            $(".rowTotal").each(function () {
+                total += parseFloat($(this).text() || 0);
+            });
+
+            $grandTotal.text(total.toFixed(2));
+
         }
 
-    });
+
+    })
+
 
 </script>
 </body>
