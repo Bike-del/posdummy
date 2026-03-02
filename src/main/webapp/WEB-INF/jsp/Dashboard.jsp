@@ -36,138 +36,39 @@
     <%@ include file="Sidebar.jsp" %>
 
     <div id="main-content" class="flex-grow-1 p-4">
-
-        <div class="card shadow-sm">
-            <div class="card-body">
-
-                <h4 class="text-primary mb-4">Sales Dashboard</h4>
-                <div class="col-md-4">
-                    <label class="form-label">Product</label>
-                    <select id="productSelect" name="productId" class="form-select rounded-pill" required>
-                        <c:forEach var="product" items="${products}">
-                            <option value="${product.productId}"> ${product.productName}</option>
-                        </c:forEach>
-                    </select>
-                </div>
-                <hr class="my-4">
-
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped align-middle" id="salesTable">
-                        <thead class="table-primary">
-                        <tr>
-                            <th>Product Name</th>
-                            <th>Category</th>
-                            <th>Price</th>
-                            <th width="120">Qty</th>
-                            <th>Total</th>
-                            <th width="80">Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="text-end mt-3">
-                    <h4>Grand Total: ₹ <span id="grandTotal">0.00</span></h4>
-                </div>
-            </div>
-        </div>
-
+                <h2>Dashboard</h2>
     </div>
 </div>
 
 <script>
 
-    $(document).ready(function () {
-        const $productSelect = $('#productSelect');
-        const $salesTableBody = $('#salesTable tbody');
-        const $grandTotal = $('#grandTotal');
-
-        //add product using ajax
-        $productSelect.on("change", function () {
-
-            const ProductId = $(this).val();
-            if (!ProductId) return;
-
-            //prevent the duplicate row
-            if ($("#row-" + ProductId).length){
-                alert("Product already added!")
-                return;
-            }
-
-            $.ajax({
-                url: "/product/" + ProductId,
-                type: 'GET',
-                dataType: "json",
-                success: function (product) {
-                    const price = parseFloat(product.sellingPrice);
-
-                    const row =
-                        '<tr id="row-' + product.productId + '">' +
 
 
 
 
 
-                        '<td>' + product.productName + '</td>' +
-
-                        '<td>' + product.category.categoryName + '</td>' +
-
-                        '<td class="price">' + price.toFixed(2) + '</td>' +
-
-                        '<td><input type="number" class="form-control qty" value="1" min="1"/></td>' +
-
-                        '<td class="rowTotal">' + price.toFixed(2) + '</td>' +
-
-                        '<td><button class="btn btn-sm btn-danger removeBtn">X</button></td>' +
-
-                        '</tr>';
-                    $salesTableBody.append(row);
-                    $productSelect.val("");
-                    calculateGrandTotal();
-                },
-                error: function () {
-                    alert("Failed to fetch productDetails.");
-                }
+    //save data in saleItem
 
 
-            })
-
-        });
-
-        //quantity change
-        $salesTableBody.on("input", ".qty", function () {
-            const $row = $(this).closest("tr");
-            const price = parseFloat($row.find(".price").text());
-            const qty = parseInt($(this).val()) || 0;
-
-            $row.find(".rowTotal").text((price * qty).toFixed(2));
-            calculateGrandTotal();
-        });
-
-        //remove table
-        $salesTableBody.on("click", ".removeBtn", function () {
-            $(this).closest("tr").remove();
-            calculateGrandTotal();
-        })
-
-        //grand total calculation
-        function calculateGrandTotal() {
-
-            let total = 0;
-            $(".rowTotal").each(function () {
-                total += parseFloat($(this).text() || 0);
-            });
-
-            $grandTotal.text(total.toFixed(2));
-
-        }
 
 
-    })
 
 
 </script>
+// tost for alret
+
+
+<div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index:1080;">
+    <div id="productToast" class="toast" role="alert">
+        <div class="toast-header">
+            <strong class="me-auto" id="toastTitle">Notification </strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body" id="toastBody"></div>
+    </div>
+</div>
+
+
+
 </body>
 </html>

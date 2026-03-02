@@ -22,7 +22,7 @@ public class SalesController {
         return salesService.getAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public Sales getById(@PathVariable long id){
         return  salesService.salesGetById(id);
     }
@@ -32,12 +32,15 @@ public class SalesController {
         return salesService.createSale(sales);
     }
 
+
+
+
     @PostMapping("/update/{id}")
     public Sales update(@RequestBody SalesDto sales, @PathVariable long id){
         return salesService.updateSale(sales,id);
     }
 
-    @DeleteMapping("Delete/{id}")
+    @PostMapping("Delete/{id}")
     public String  delete(@PathVariable long id){
          salesService.deleteSales(id);
          return "Success";

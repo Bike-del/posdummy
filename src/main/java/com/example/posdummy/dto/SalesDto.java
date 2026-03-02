@@ -3,6 +3,7 @@ package com.example.posdummy.dto;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class SalesDto {
@@ -13,6 +14,9 @@ public class SalesDto {
 
     private String orderNo;
 
-    private LocalDateTime date;
+    private LocalDateTime saleDate;
+
+
+    private List<SalesItemDto> items;
 
 }

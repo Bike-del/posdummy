@@ -19,10 +19,10 @@ public class SalesItemController {
 
     @GetMapping("/getAll")
     public List<SalesItem> getAll(){
-         return  salesItemService.getall();
+         return  salesItemService.getAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public SalesItem getById(@PathVariable long id){
         return salesItemService.getById(id);
     }
@@ -37,7 +37,7 @@ public class SalesItemController {
         return salesItemService.updateSalesItem(salesItemDto,id);
     }
 
-    @DeleteMapping("/Delete/{id}")
+    @PostMapping("/Delete/{id}")
     public String  delete(@PathVariable long id){
         salesItemService.deleteSalesItem(id);
         return "Success";

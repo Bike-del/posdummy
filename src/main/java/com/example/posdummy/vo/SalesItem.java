@@ -15,7 +15,7 @@ public class SalesItem {
 
 
     // what type of mapping can happen here
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "product_id",nullable = false)
     private Product product;
 

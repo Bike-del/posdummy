@@ -25,9 +25,15 @@
             </a>
         </li>
         <li class="nav-item mb-1">
-            <a href="${pageContext.request.contextPath}/EditPage" class="nav-link text-white d-flex align-items-center">
-                <i class="bi bi-gear me-2"></i>
-                <span class="link-text">Settings</span>
+            <a href="${pageContext.request.contextPath}/pos" class="nav-link text-white d-flex align-items-center">
+                <i class="bi bi-star me-2"></i>
+                <span class="link-text">POS</span>
+            </a>
+        </li>
+        <li class="nav-item mb-1">
+            <a href="${pageContext.request.contextPath}/sales" class="nav-link text-white d-flex align-items-center">
+                <i class="bi bi-list me-2"></i>
+                <span class="link-text">Sales</span>
             </a>
         </li>
     </ul>

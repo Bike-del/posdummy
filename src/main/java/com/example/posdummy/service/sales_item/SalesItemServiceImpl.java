@@ -28,7 +28,7 @@ public class SalesItemServiceImpl implements SalesItemService {
     @Override
     public SalesItem createSalesItem(SalesItemDto salesItemDto) {
 
-        Sales sales = salesService.salesGetById(salesItemDto.getSalesItemId());
+        Sales sales = salesService.salesGetById(salesItemDto.getSalesId());
         Product product = productService.getById(salesItemDto.getProductId());
 
         SalesItem salesItem = new SalesItem();
@@ -45,10 +45,15 @@ public class SalesItemServiceImpl implements SalesItemService {
     @Override
     public SalesItem updateSalesItem(SalesItemDto salesItemDto, long id) {
 
-        Sales sales = salesService.salesGetById(salesItemDto.getSalesItemId());
+
+
+
+
+        Sales sales = salesService.salesGetById(salesItemDto.getSalesId());
         Product product = productService.getById(salesItemDto.getProductId());
 
         SalesItem salesItem = salesItemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("sales not found for this id:" + id));
+
         salesItem.setSalesQty(salesItemDto.getSalesQty());
         salesItem.setProduct(product);
         salesItem.setSales(sales);
@@ -59,7 +64,7 @@ public class SalesItemServiceImpl implements SalesItemService {
     }
 
     @Override
-    public List<SalesItem> getall() {
+    public List<SalesItem> getAll() {
         return salesItemRepository.findAll();
     }
 

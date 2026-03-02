@@ -4,7 +4,10 @@ import com.example.posdummy.dto.ProductDto;
 import com.example.posdummy.service.Brand.BrandService;
 import com.example.posdummy.service.Category.CategoryService;
 import com.example.posdummy.service.Product.ProductService;
+import com.example.posdummy.service.sales.SalesService;
+import com.example.posdummy.service.sales_item.SalesItemService;
 import com.example.posdummy.vo.Product;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
@@ -12,16 +15,17 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller()
+@RequiredArgsConstructor
 public class PageController {
 
-    @Autowired
-    private ProductService productService;
 
-    @Autowired
-    private CategoryService categoryService;
+    private final ProductService productService;
+    private final CategoryService categoryService;
+    private final BrandService brandService;
+    private final SalesService salesService;
+    private final SalesItemService salesItemService;
 
-    @Autowired
-    private BrandService brandService;
+
 
     @GetMapping("/product")
     public ModelAndView productPage(){
@@ -64,11 +68,29 @@ public class PageController {
 //        return mv;
 //    }
 
-    @GetMapping("/dashboard")
-    public ModelAndView Dashboard(){
-        ModelAndView mv = new ModelAndView("Dashboard");
+    @GetMapping("/pos")
+    public ModelAndView Pos(){
+        ModelAndView mv = new ModelAndView("pos");
         mv.addObject("products",productService.getAllProduct());
         return mv;
     }
+
+    @GetMapping("/dashboard")
+    public ModelAndView Dashboard(){
+        ModelAndView mv = new ModelAndView("Dashboard");
+//        mv.addObject("products",productService.getAllProduct());
+        return mv;
+    }
+
+
+    @GetMapping("/sales")
+    public ModelAndView sales(){
+        ModelAndView mv = new ModelAndView("Sales");
+        mv.addObject("sales",salesService.getAll());
+        mv.addObject("salesItem",salesItemService.getAll());
+        return mv;
+
+    }
+
 
 }

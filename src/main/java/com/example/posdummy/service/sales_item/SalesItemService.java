@@ -12,7 +12,7 @@ public interface SalesItemService {
 
         public SalesItem createSalesItem(SalesItemDto salesItemDto);
         public SalesItem updateSalesItem(SalesItemDto salesItemDto,long id);
-        public List<SalesItem> getall();
+        public List<SalesItem> getAll();
         public SalesItem getById(long id);
         public void deleteSalesItem(long id);
 
